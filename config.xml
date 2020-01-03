@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="https://toggl.com/Toggl-button" version="1.0.0" viewmodes="maximized">
-    <access origin="https://www.tizen.org" subdomains="true"></access>
-    <tizen:application id="6rEo9sgAHN.Togll" package="6rEo9sgAHN" required_version="2.3"/>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="https://toggl.com/Toggl-button" version="1.0.0" viewmodes="maximized">x
+    <tizen:application id="i03IE0eU4s.Toggl" package="i03IE0eU4s" required_version="2.3"/>
     <author href="https://do.linkedin.com/in/franmen-guillermo-de-los-santos-4773b120" email="franmen05@gmail.com">Guillermo De Los Santos</author>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
@@ -9,5 +8,4 @@
     <name>Toggl</name>
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
     <tizen:profile name="wearable"/>
-    <tizen:setting background-support="disable" encryption="disable" hwkey-event="enable"/>
 </widget>

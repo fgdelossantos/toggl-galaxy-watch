@@ -10,6 +10,7 @@ body {
     line-height: 1;
 }
 
+
 .title{
 	
 	text-shadow: 1px 1px 2px pink;
@@ -49,11 +50,22 @@ body {
 
 
 
+ #login-container {
+    width: 100%;
+   
+    text-align: center;
+    vertical-align: middle;
+}
 #area-news {
     width: 100%;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+}
+input{
+	width: 60%;
+	height: 30px; 
+	font-size: 1.7em;
 }
 
 #area-pagenum, #area-title{
