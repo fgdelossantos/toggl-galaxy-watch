@@ -17,7 +17,20 @@
             </div>
         </div>
         <div id="contents">
-
+			<div id="login-container" hidden="true">
+                <div>
+                  	<p>
+	            		<label class="subject title">Login  </label>
+            		</p>
+	            </div>
+				<div>
+					<input type="text" id="user_name" placeholder="Email"/>
+				</div>	
+                <br>    
+				<div>
+					<input type="password" id="pass" placeholder="Password"/>
+				</div>	
+			</div>
             <div id="area-news">
 				<div>
                   	<p>
@@ -26,13 +39,14 @@
 	            </div>
             	<label id="toggl-task" class="subject">Loading...</label>
             	<!-- <label id="toggl-time" class="subject">55:55:55</label> -->
-            	<input id="toggl-taskId" type="hidden"></input>
+            	<input id="toggl-taskId" type="hidden" />  
             </div>
         </div>
         <div id="footer">
             <div id="area-pagenum">
              	<a id="stop_btn" class="stop-btn">Stop</a>
              	<a id="get_btn" class="stop-btn" style="display: none;">Get Task</a>
+             	<a id="login_btn" class="stop-btn" style="display: none;">Log In</a>
             </div>
         </div>
     </div>
