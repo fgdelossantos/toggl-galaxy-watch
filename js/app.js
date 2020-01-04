@@ -1,7 +1,7 @@
 
 
-//const BASE_URL="http://192.168.0.14:3000";//mi casa
-const BASE_URL="http://10.12.13.46:3000";//mi casa
+const BASE_URL="http://192.168.0.14:3000";//mi casa
+//const BASE_URL="http://10.12.13.46:3000";//gcs
 //const BASE_URL="http://localhost:3000";//gbh
 //const BASE_URL="http://192.168.30.151:3000";//gbh 
 //const BASE_URL = "https://protected-beyond-92029.herokuapp.com";// heroku
@@ -31,13 +31,14 @@ let token='';
             pass:$("#pass").val()
         };
         
-    	const jqxhr = $.post( BASE_URL+"/login",userData, (token)=> {
+    	const jqxhr = $.post( BASE_URL+"/login",userData, (_token)=> {
     		
-            userData.token=token;
+            userData.token=_token;
             
             userData=storeUserData(userData)
             
     	    console.info("UserData : "+userData.token +" Save!. ");
+            token=_token;
             
 //    	  $("#togll-task").text(json.data.description);
     	  alert(`Welcome!  ${userData.user}`);
@@ -158,10 +159,10 @@ let token='';
         } 
     //   	 	console.info(localStorage.getItem("JSON"));
     //  	 localStorage.setItem("lastname", "Smith");
-        if(localStorage.getItem("token")!=null)
+//        if(localStorage.getItem("token")!=null)
             return {token: localStorage.getItem("token"),user: localStorage.getItem("user"),pass: localStorage.getItem("pass")}
         
-        return null;
+//        return null;
     }
  
 
@@ -193,8 +194,9 @@ let token='';
         $("#stop_btn").hide();
         
         const userData=storeUserData(null);
+        console.info(userData);
         
-        if(userData==null){
+        if(userData.token==null){
             
             $("#login-container").show("show");
             $("#login_btn").show("show");
@@ -203,9 +205,11 @@ let token='';
             
         }else{
             token=userData.token;
+//            userData.token=null;
             
-            console.info(userData);
+            
             loadCurrentTask();
+//            storeUserData(userData);
         }
     
         
