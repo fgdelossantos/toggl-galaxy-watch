@@ -1,10 +1,8 @@
 
-
-const BASE_URL="http://192.168.0.14:3000";//mi casa
+//const BASE_URL="http://192.168.0.14:3000";//mi casa
 //const BASE_URL="http://10.12.13.46:3000";//gcs
-//const BASE_URL="http://localhost:3000";//gbh
-//const BASE_URL="http://192.168.30.151:3000";//gbh 
-//const BASE_URL = "https://protected-beyond-92029.herokuapp.com";// heroku
+//const BASE_URL="http://192.168.30.151:3000";//gbh
+const BASE_URL = "https://protected-beyond-92029.herokuapp.com";// heroku
 const NOT_WORK_MSG = "No task in progress...";
 let token='';
 
@@ -14,72 +12,82 @@ let token='';
      * @param {Object} event - The object contains data of key event
      */
     function keyEventHandler(event){
-        
-        if (event.keyName == "back") { 
+
+        if (event.keyName == "back") {
             try {
                 tizen.application.getCurrentApplication().exit();
             } catch (ignore) {}
         }
     }
 
-    function login() {
-    	
+    function closeSession() {
+
+       if(confirm("Do you want close session? ")){
+            clearUserData();
+       }
+
+
+    }
+
+    const login = ()=> {
+
     	// $("#get_btn").text("Get Task");
         let userData={
             token: '',
             user:$("#user_name").val(),
             pass:$("#pass").val()
         };
-        
+
     	const jqxhr = $.post( BASE_URL+"/login",userData, (_token)=> {
-    		
+
             userData.token=_token;
-            
+
             userData=storeUserData(userData)
-            
+
     	    console.info("UserData : "+userData.token +" Save!. ");
             token=_token;
-            
+
 //    	  $("#togll-task").text(json.data.description);
     	  alert(`Welcome!  ${userData.user}`);
     	  $("#toggl-task").text(NOT_WORK_MSG);
     	  $("#login-container").hide("slow");
     	  $("#login_btn").hide("slow");
 
-          
+
 		  loadCurrentTask();
-		  
+
     	})
     	  .fail((e)=> {
     	    console.error( "error",e);
-    		alert("Error: The task could not be finished ");
-    	  })
-    	  .always(() => {
-    	    console.log( "complete" );
-    	  });   	 
-    } 
-    
+    	    if(e.status===403)
+    	    	alert("Inconrect User or Password !! ");
+    	    else {
+    	    	alert("server error ");
+			}
+    	  });
+    }
+
     function startStopTask() {
-        
+
         const token=storeUserData(null).token;
-    	
+
     	$("#get_btn").text("Get Task");
     	const taskId=$("#toggl-taskId").val();
 //    	alert(taskId);
-        
+
         const URL=BASE_URL+`/stop/${taskId}?token=${token}`;
         console.info(URL);
-        
-        
+
+
     	const jqxhr = $.getJSON(URL , (json)=> {
-    		
+
     	  console.debug("Work : "+json.data.description +" Done!. ");
     	  $("#togll-task").text(json.data.description);
     	  alert("Done!  ");
     	  $("#toggl-task").text(NOT_WORK_MSG);
     	  $("#stop_btn").hide("slow");
 		  $("#get_btn").show();
-		  
+
     	})
     	  .fail((e)=> {
     	    console.error( "error",e);
@@ -87,24 +95,24 @@ let token='';
     	  })
     	  .always(() => {
     	    console.log( "complete" );
-    	  });   	 
+    	  });
     }
-    
+
     function loadCurrentTask() {
-        
+
         // const token=userData.token;
-        
-        cancelAnimationFrame
-        
+
+        // cancelAnimationFrame
+
         $("#area-news").show("slow");
         $("#get_btn").show("slow");
-    	$("#toggl-task").text("loading...");
-        	
-        
+    	  $("#toggl-task").text("loading...");
+
+
         const URL=BASE_URL+`/current?token=${token}`;
-        
+
         console.info(URL);
-        
+
           const jqxhr = $.getJSON( URL, (json)=> {
               console.log( json.data );
 
@@ -115,18 +123,18 @@ let token='';
                   $("#get_btn").show("fast");
 
               }else{
-                  
+
                   console.log(json.data.description);
                   if(json.data.description===undefined)
                       $("#toggl-task").text("No description");
-                  else {   			  
+                  else {
                       $("#toggl-task").text(json.data.description);
                       localStorage.setItem("JSON", JSON.stringify(json.data));
                   }
                   $("#toggl-taskId").val(json.data.id);
             //    	  alert("Tarea Cargada ");
                   $("#get_btn").hide("slow");
-                  $("#stop_btn").show(); 
+                  $("#stop_btn").show();
               }
           })
     	  .fail((e)=> {
@@ -136,15 +144,12 @@ let token='';
             $("#stop_btn").hide();
             $("#get_btn").show();
             $("#toggl-task").text("The task could not be loaded");
-            //  		  	$("#login-container").show("show");
-            //  		  	$("#login-container").show("show");
-  		  	
-  		  	
+
     	  })
     	  .always(() => {
-    		  
-    	    console.debug( "complete" );
-    	  });   	 
+
+    	      console.debug( "complete" );
+    	  });
     }
 
     function storeUserData(userData){
@@ -156,33 +161,42 @@ let token='';
             localStorage.setItem("user",  userData.user);
             localStorage.setItem("pass",  userData.pass);
 
-        } 
+        }
     //   	 	console.info(localStorage.getItem("JSON"));
     //  	 localStorage.setItem("lastname", "Smith");
 //        if(localStorage.getItem("token")!=null)
-            return {token: localStorage.getItem("token"),user: localStorage.getItem("user"),pass: localStorage.getItem("pass")}
-        
-//        return null;
+        return {token: localStorage.getItem("token"),user: localStorage.getItem("user"),pass: localStorage.getItem("pass")}
     }
- 
+
+    function clearUserData(){
+        console.info("######### CLEAR STORE ######");
+
+        const userData=storeUserData(null);
+
+        localStorage.clear();
+        localStorage.setItem("_user",  userData.user);
+        localStorage.setItem("_pass",  userData.pass);
+
+        location.reload();
+    }
+
 
 (function() {
-   
+
 
     /**
      * Sets default event listeners.
      * @private
      */
     function setDefaultEvents() {
-    	
+
         document.addEventListener("tizenhwkey", keyEventHandler);
         $("#stop_btn").click(startStopTask);
         $("#get_btn").click(loadCurrentTask);
         $("#login_btn").click(login);
+        $("#close_session_btn").click(closeSession);
 //        $("#get_btn").hide();
     }
-
-
 
     /**
      * Initiates the application.
@@ -190,31 +204,28 @@ let token='';
      */
     function init() {
         setDefaultEvents();
-        
+
         $("#stop_btn").hide();
-        
+
         const userData=storeUserData(null);
         console.info(userData);
-        
+//        alert(userData.token);
+
         if(userData.token==null){
-            
+
+        	  $("#user_name").val(localStorage.getItem("_user"));
+        	  $("#pass").val(localStorage.getItem("_pass"));
+
             $("#login-container").show("show");
             $("#login_btn").show("show");
-            
-            $("#area-news").hide(); 
-            
+            $("#area-news").hide();
+
         }else{
             token=userData.token;
-//            userData.token=null;
-            
-            
             loadCurrentTask();
-//            storeUserData(userData);
         }
-    
-        
 
     }
-    
+
     window.onload = init;
 }());
